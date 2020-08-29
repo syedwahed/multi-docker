@@ -3,18 +3,18 @@ language: generic
 services:
   - docker
 
-before_install
+before_install:
   - docker build -t syedwahed/react-test -f ./client/Dockerfile.dev ./client
 
 
- script:
+script:
   - docker run -e CI=true syedwahed/react-test npm test
 
-  after_success:
-    - docker build -t syedwahed/multi-client ./client
-    - docker build -t syedwahed/multi-nginx ./nginx
-    - docker build -t syedwahed/multi-server ./server
-    - docker build -t syedwahed/multi-worker ./worker
+after_success:
+  - docker build -t syedwahed/multi-client ./client
+  - docker build -t syedwahed/multi-nginx ./nginx
+  - docker build -t syedwahed/multi-server ./server
+  - docker build -t syedwahed/multi-worker ./worker
 # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID"   --password-stdin
   
